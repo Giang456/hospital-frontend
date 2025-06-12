@@ -1,0 +1,41 @@
+/* Import Bootstrap CSS TRƯỚC BẤT KỲ CSS TÙY CHỈNH NÀO CỦA BẠN */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* Reset CSS cơ bản và kiểu dáng toàn cục */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif; /* Font cơ bản */
+  background-color: #f0f2f5; /* Nền xám nhạt */
+  color: #333;
+}
+
+#root {
+  min-height: 100vh; /* Đảm bảo root chiếm toàn bộ chiều cao màn hình */
+  display: flex;
+  flex-direction: column; /* Cho phép footer nằm dưới */
+}
+
+/* Các style chung cho ứng dụng React */
+.App {
+  flex-grow: 1; /* Cho phép App component mở rộng để chiếm không gian còn lại */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Để căn giữa nội dung form */
+.auth-center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Đảm bảo chiếm toàn bộ chiều cao để căn giữa */
+  padding: 20px; /* Thêm padding để nội dung không chạm biên */
+}
+
+.auth-form-card {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  width: 100%;
+  max-width: 450px; /* Giới hạn chiều rộng tối đa cho form */
+}
