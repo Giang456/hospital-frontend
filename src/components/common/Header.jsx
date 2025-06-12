@@ -58,7 +58,7 @@ const Header = () => {
             <Container>
                 <Navbar.Brand as={Link} to={isAuthenticated ? getDashboardPath(userRole) : '/'}>
                     <img
-                        src="/src/assets/images/logo.png"
+                        src="/assets/logo-DdaJqqVz.png"
                         alt="Logo"
                         width="30"
                         height="30"
