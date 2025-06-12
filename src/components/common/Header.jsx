@@ -5,6 +5,7 @@ import LogoutButton from './LogoutButton';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast'; // Import toast
 
+import logo from '../../assets/images/logo.png';
 const Header = () => {
     const { isAuthenticated, user } = useAuth();
     const navigate = useNavigate();
@@ -58,7 +59,7 @@ const Header = () => {
             <Container>
                 <Navbar.Brand as={Link} to={isAuthenticated ? getDashboardPath(userRole) : '/'}>
                     <img
-                        src="/assets/logo-DdaJqqVz.png"
+                        src= {logo}
                         alt="Logo"
                         width="30"
                         height="30"
