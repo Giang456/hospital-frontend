@@ -64,19 +64,60 @@ import DepartmentReportsPage from './features/HeadOfDepartment/pages/DepartmentR
 import logo from './assets/images/logo.png';
 import hospitalBuilding1 from './assets/images/hospital_building_1.jpg';
 import hospitalBuilding2 from './assets/images/hospital_building_2.jpg';
+import banner from './assets/images/banner.jpg';
+
 const WelcomePage = () => (
-  <MainLayout> {/* Bọc WelcomePage bằng MainLayout */}
-    <Container className="my-4">
-      <h1 className="text-center mb-4">Chào mừng bạn đến với Hệ thống Đặt khám Trực tuyến</h1>
+  <MainLayout>
+    {/* Banner Section với background mờ */}
+    <div 
+      className="hero-section position-relative"
+      style={{
+        backgroundImage: `url(${banner})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '60vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      {/* Overlay mờ */}
+      <div 
+        className="position-absolute w-100 h-100"
+        style={{
+          background: 'rgba(255, 255, 255, 0.85)',
+          top: 0,
+          left: 0,
+          zIndex: 1
+        }}
+      ></div>
+      
+      {/* Nội dung chính */}
+      <Container className="position-relative" style={{ zIndex: 2 }}>
+        <Row className="text-center">
+          <Col>
+            <h1 className="display-4 mb-4 text-dark">
+              Chào mừng bạn đến với Hệ thống Đặt khám Trực tuyến
+            </h1>
+            <p className="lead mb-4 text-muted">
+              Vui lòng đăng nhập hoặc đăng ký để tiếp tục.
+            </p>
+            <div className="d-flex justify-content-center gap-3">
+              <Link to="/login" className="btn btn-primary btn-lg px-4">
+                Đăng nhập
+              </Link>
+              <Link to="/register" className="btn btn-outline-primary btn-lg px-4">
+                Đăng ký
+              </Link>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </div>
 
-      <Row className="mb-4 text-center">
-        <Col>
-          <p className="lead">Vui lòng đăng nhập hoặc đăng ký để tiếp tục.</p>
-          <Link to="/login" className="btn btn-primary me-2">Đăng nhập</Link>
-          <Link to="/register" className="btn btn-secondary">Đăng ký</Link>
-        </Col>
-      </Row>
-
+    {/* Phần nội dung giới thiệu */}
+    <Container className="my-5">
       {/* NỘI DUNG GIỚI THIỆU TỪ AboutUsPage */}
       <Row className="mb-4 align-items-center">
           <Col md={3} className="text-center">
