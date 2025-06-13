@@ -3,7 +3,8 @@ import RegisterForm from '../components/RegisterForm';
 import axiosInstance from '../../../services/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import AuthLayout from '../../../components/layouts/AuthLayout'; // Import AuthLayout
+import AuthLayout from '../../../components/layouts/AuthLayout';
+import bannerRegister from '../../../assets/images/banner-register.png';
 
 const RegisterPage = () => {
     const navigate = useNavigate();
@@ -17,13 +18,9 @@ const RegisterPage = () => {
         } catch (error) {
             if (error.response && error.response.data && error.response.data.errors) {
                 Object.keys(error.response.data.errors).forEach(key => {
-                    // Nếu lỗi là `password_confirmation`, đặt lỗi vào trường `password_confirmation`
-                    // Các lỗi khác sẽ tự động ánh xạ nếu tên trường khớp
                     if (key === 'password_confirmation') {
-                         toast.error(error.response.data.errors[key][0]); // Hiển thị toast cho lỗi xác nhận mật khẩu
+                         toast.error(error.response.data.errors[key][0]);
                     } else {
-                        // Đặt lỗi vào trường form nếu tên trường khớp
-                        // setError(key, { type: 'server', message: error.response.data.errors[key][0] }); // Đã xử lý trong RegisterForm
                     }
                 });
             }
@@ -40,9 +37,43 @@ const RegisterPage = () => {
     };
 
     return (
-        <AuthLayout> {/* Bọc RegisterForm bằng AuthLayout */}
-            <RegisterForm onSubmit={handleRegister} />
-        </AuthLayout>
+        <>
+            {/* Banner Section với background mờ - bên ngoài AuthLayout */}
+            <div 
+                className="register-hero-section position-relative"
+                style={{
+                    backgroundImage: `url(${bannerRegister})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    minHeight: '100vh',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                {/* Overlay mờ */}
+                <div 
+                    className="position-absolute w-100 h-100"
+                    style={{
+                        background: 'rgba(255, 255, 255, 0.44)',
+                        top: 0,
+                        left: 0,
+                        zIndex: 1
+                    }}
+                ></div>
+                
+                {/* AuthLayout và Form đăng ký nổi lên trên banner */}
+                <div 
+                    className="position-relative d-flex align-items-center justify-content-center w-100"
+                    style={{ zIndex: 2 }}
+                >
+                    <AuthLayout>
+                        <RegisterForm onSubmit={handleRegister} />
+                    </AuthLayout>
+                </div>
+            </div>
+        </>
     );
 };
 
