@@ -154,6 +154,33 @@ const DoctorAppointmentsPage = () => {
         }
     };
 
+    // Hàm chuyển trạng thái sang tiếng Việt
+    const getStatusLabel = (status) => {
+        switch (status) {
+            case 'PENDING_APPROVAL':
+                return 'Chờ phê duyệt';
+            case 'APPROVED':
+                return 'Đã phê duyệt';
+            case 'CANCELLED':
+            case 'CANCELLED_BY_PATIENT':
+                return 'Bệnh nhân đã hủy';
+            case 'CANCELLED_BY_DOCTOR':
+                return 'Bác sĩ đã hủy';
+            case 'CANCELLED_BY_STAFF':
+                return 'Nhân viên đã hủy';
+            case 'REJECTED':
+                return 'Bị từ chối';
+            case 'COMPLETED':
+                return 'Đã hoàn thành';
+            case 'PAYMENT_PENDING':
+                return 'Chờ thanh toán';
+            case 'PAID':
+                return 'Đã thanh toán';
+            default:
+                return status;
+        }
+    };
+
     const renderAppointmentCard = (appointment) => (
         <Card key={appointment.id} className="mb-3 shadow-sm">
             <Card.Body>
@@ -166,7 +193,7 @@ const DoctorAppointmentsPage = () => {
                     <br />
                     Phòng khám: {appointment.clinic?.name || 'N/A'} ({appointment.clinic?.room_number ? `Phòng ${appointment.clinic.room_number}` : 'N/A'})
                     <br />
-                    Trạng thái: <strong>{appointment.status}</strong>
+                    Trạng thái: <strong>{getStatusLabel(appointment.status)}</strong>
                     {appointment.cancellation_reason && <p className="text-danger mt-2">Lý do hủy/từ chối: {appointment.cancellation_reason}</p>}
                 </Card.Text>
                 <div className="d-flex justify-content-end gap-2">
