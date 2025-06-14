@@ -158,6 +158,30 @@ const DepartmentAppointmentManagementPage = () => {
         }
     };
 
+    // Hàm chuyển trạng thái sang tiếng Việt
+    const getStatusLabel = (status) => {
+        switch (status) {
+            case 'PENDING_APPROVAL':
+                return 'Chờ phê duyệt';
+            case 'APPROVED':
+                return 'Đã phê duyệt';
+            case 'CANCELLED':
+            case 'CANCELLED_BY_PATIENT':
+                return 'Bệnh nhân đã hủy';
+            case 'CANCELLED_BY_DOCTOR':
+                return 'Bác sĩ đã hủy';
+            case 'CANCELLED_BY_STAFF':
+                return 'Nhân viên đã hủy';
+            case 'REJECTED':
+                return 'Bị từ chối';
+            case 'COMPLETED':
+                return 'Đã hoàn thành';
+            case 'PAID':
+                return 'Đã thanh toán';
+            default:
+                return status;
+        }
+    };
 
     const renderAppointmentCard = (appointment) => {
         const doctorName = appointment.doctor?.name || 'N/A';
@@ -176,7 +200,7 @@ const DepartmentAppointmentManagementPage = () => {
                         <br />
                         Phòng khám: {appointment.clinic?.name || 'N/A'} ({appointment.clinic?.room_number ? `Phòng ${appointment.clinic.room_number}` : 'N/A'})
                         <br />
-                        Trạng thái: <span className={`fw-bold text-${appointment.status === 'APPROVED' ? 'success' : ['REJECTED', 'CANCELLED_BY_STAFF', 'CANCELLED_BY_DOCTOR', 'CANCELLED_BY_PATIENT'].includes(appointment.status) ? 'danger' : 'warning'}`}>{appointment.status}</span>
+                        Trạng thái: <span className={`fw-bold text-${appointment.status === 'APPROVED' ? 'success' : ['REJECTED', 'CANCELLED_BY_STAFF', 'CANCELLED_BY_DOCTOR', 'CANCELLED_BY_PATIENT'].includes(appointment.status) ? 'danger' : 'warning'}`}>{getStatusLabel(appointment.status)}</span>
                         {appointment.cancellation_reason && <p className="text-danger mt-1 mb-0"><small>Lý do hủy/từ chối: {appointment.cancellation_reason}</small></p>}
                     </Card.Text>
                     {/* Nút hành động */}
