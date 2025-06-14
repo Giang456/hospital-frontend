@@ -14,6 +14,21 @@ const rejectReasonSchema = z.object({
     rejection_reason: z.string().min(1, 'Lý do từ chối là bắt buộc.').max(500, 'Lý do không được quá 500 ký tự.'),
 });
 
+// Hàm chuyển trạng thái sang tiếng Việt
+const getStatusLabel = (status) => {
+    switch (status) {
+        case 'PENDING_HOD_APPROVAL':
+            return 'Chờ Trưởng khoa duyệt';
+        case 'PENDING_SA_APPROVAL':
+            return 'Chờ Admin duyệt';
+        case 'APPROVED':
+            return 'Đã duyệt';
+        case 'REJECTED':
+            return 'Đã từ chối';
+        default:
+            return status;
+    }
+};
 
 const LeaveRequestManagementPage = () => {
     const [leaveRequests, setLeaveRequests] = useState([]);
@@ -149,7 +164,7 @@ const LeaveRequestManagementPage = () => {
                                             {request.end_date ? format(parseISO(request.end_date), 'dd/MM/yyyy HH:mm') : 'N/A'}
                                         </td>
                                         <td>{request.reason ? (request.reason.length > 50 ? request.reason.substring(0, 50) + '...' : request.reason) : 'N/A'}</td>
-                                        <td><span className={`badge bg-${request.status === 'APPROVED' ? 'success' : request.status === 'REJECTED' ? 'danger' : 'warning'}`}>{request.status}</span></td>
+                                        <td><span className={`badge bg-${request.status === 'APPROVED' ? 'success' : request.status === 'REJECTED' ? 'danger' : 'warning'}`}>{getStatusLabel(request.status)}</span></td>
                                         <td>{request.approver?.name || 'N/A'}</td>
                                         <td>
                                             <Button variant="primary" size="sm" onClick={() => handleShowDetailModal(request)}>Xem & Duyệt</Button>
@@ -173,7 +188,7 @@ const LeaveRequestManagementPage = () => {
                                 <Card.Text><strong>Nhân viên:</strong> {currentRequest.user?.name} {currentRequest.user?.roles?.length > 0 ? `(${(typeof currentRequest.user.roles[0] === 'string' ? currentRequest.user.roles[0] : currentRequest.user.roles[0]?.name) || 'N/A'})` : ''}</Card.Text>
                                 <Card.Text><strong>Thời gian nghỉ:</strong> {currentRequest.start_date ? format(parseISO(currentRequest.start_date), 'dd/MM/yyyy HH:mm') : 'N/A'} đến {currentRequest.end_date ? format(parseISO(currentRequest.end_date), 'dd/MM/yyyy HH:mm') : 'N/A'}</Card.Text>
                                 <Card.Text><strong>Lý do:</strong><pre style={{whiteSpace: "pre-wrap", wordBreak: "break-word"}}>{currentRequest.reason}</pre></Card.Text>
-                                <Card.Text><strong>Trạng thái:</strong> <span className={`fw-bold text-${currentRequest.status === 'APPROVED' ? 'success' : currentRequest.status === 'REJECTED' ? 'danger' : 'warning'}`}>{currentRequest.status}</span></Card.Text>
+                                <Card.Text><strong>Trạng thái:</strong> <span className={`fw-bold text-${currentRequest.status === 'APPROVED' ? 'success' : currentRequest.status === 'REJECTED' ? 'danger' : 'warning'}`}>{getStatusLabel(currentRequest.status)}</span></Card.Text>
                                 {currentRequest.approver && <Card.Text><strong>Người duyệt:</strong> {currentRequest.approver.name}</Card.Text>}
                                 {currentRequest.rejection_reason && <Card.Text className="text-danger"><strong>Lý do từ chối:</strong> {currentRequest.rejection_reason}</Card.Text>}
                             </Card>
