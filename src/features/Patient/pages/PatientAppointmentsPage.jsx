@@ -4,6 +4,24 @@ import axiosInstance from '../../../services/axiosInstance';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 
+// Hàm chuyển trạng thái sang tiếng Việt
+const getStatusLabel = (status) => {
+    switch (status) {
+        case 'PENDING_APPROVAL':
+            return 'Chờ phê duyệt';
+        case 'APPROVED':
+            return 'Đã phê duyệt';
+        case 'CANCELLED':
+            return 'Đã hủy';
+        case 'REJECTED':
+            return 'Bị từ chối';
+        case 'COMPLETED':
+            return 'Đã hoàn thành';
+        default:
+            return status;
+    }
+};
+
 const PatientAppointmentsPage = () => {
     const [activeTab, setActiveTab] = useState('upcoming');
     const [appointments, setAppointments] = useState([]);
@@ -90,7 +108,7 @@ const PatientAppointmentsPage = () => {
                         <br />
                         Phòng khám: {appointment.clinic?.name || 'N/A'} ({appointment.clinic?.room_number ? `Phòng ${appointment.clinic.room_number}` : 'N/A'})
                         <br />
-                        Trạng thái: <strong>{appointment.status}</strong>
+                        Trạng thái: <strong>{getStatusLabel(appointment.status)}</strong>
                         {appointment.cancellation_reason && <p className="text-danger mt-2">Lý do hủy/từ chối: {appointment.cancellation_reason}</p>}
                     </Card.Text>
                     {/* Nút hủy chỉ hiển thị nếu lịch hẹn có thể hủy */}
