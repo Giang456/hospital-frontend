@@ -26,6 +26,18 @@ const ReportAndStatisticsPage = () => {
     const [revenueData, setRevenueData] = useState(null);
     const [appointmentStatsData, setAppointmentStatsData] = useState(null);
 
+    // Hàm dịch trạng thái sang tiếng Việt
+    const translateStatus = (status) => {
+        const statusMap = {
+            'PENDING_APPROVAL': 'Chờ phê duyệt',
+            'APPROVED': 'Đã phê duyệt',
+            'CANCELLED_BY_PATIENT': 'Bệnh nhân hủy',
+            'PAYMENT_PENDING': 'Chờ thanh toán',
+            'PAID': 'Đã thanh toán'
+        };
+        return statusMap[status] || status;
+    };
+
     const fetchFilterData = useCallback(async () => {
         setLoadingFilters(true);
         try {
@@ -175,7 +187,7 @@ const ReportAndStatisticsPage = () => {
                 <Table striped bordered hover responsive className="shadow-sm mb-4">
                     <thead><tr><th>Trạng thái</th><th>Số lượng</th></tr></thead>
                     <tbody>
-                        {Object.keys(appointmentStatsData.appointments_by_status || {}).length > 0 ? Object.entries(appointmentStatsData.appointments_by_status).map(([status, count]) => (<tr key={status}><td>{status}</td><td>{count}</td></tr>)) : <tr><td colSpan="2" className="text-center">Không có dữ liệu.</td></tr>}
+                        {Object.keys(appointmentStatsData.appointments_by_status || {}).length > 0 ? Object.entries(appointmentStatsData.appointments_by_status).map(([status, count]) => (<tr key={status}><td>{translateStatus(status)}</td><td>{count}</td></tr>)) : <tr><td colSpan="2" className="text-center">Không có dữ liệu.</td></tr>}
                     </tbody>
                 </Table>
                 <h5 className="mt-4">Chi tiết lịch hẹn:</h5>
@@ -183,7 +195,7 @@ const ReportAndStatisticsPage = () => {
                     <Table striped bordered hover responsive className="shadow-sm">
                         <thead><tr><th>ID Lịch hẹn</th><th>Bệnh nhân</th><th>Bác sĩ</th><th>Chuyên khoa</th><th>Ngày hẹn</th><th>Trạng thái</th></tr></thead>
                         <tbody>
-                            {appointmentStatsData.details_appointments.map(appt => (<tr key={appt.appointment_id}><td>{appt.appointment_id}</td><td>{appt.patient_name || 'N/A'}</td><td>{appt.doctor_name || 'N/A'}</td><td>{appt.doctor_specialization || 'N/A'}</td><td>{appt.appointment_date ? format(parseISO(appt.appointment_date), 'dd/MM/yyyy') : 'N/A'}</td><td>{appt.status}</td></tr>))}
+                            {appointmentStatsData.details_appointments.map(appt => (<tr key={appt.appointment_id}><td>{appt.appointment_id}</td><td>{appt.patient_name || 'N/A'}</td><td>{appt.doctor_name || 'N/A'}</td><td>{appt.doctor_specialization || 'N/A'}</td><td>{appt.appointment_date ? format(parseISO(appt.appointment_date), 'dd/MM/yyyy') : 'N/A'}</td><td>{translateStatus(appt.status)}</td></tr>))}
                         </tbody>
                     </Table>
                 ) : (<Alert variant="info">Không có chi tiết lịch hẹn.</Alert>)}

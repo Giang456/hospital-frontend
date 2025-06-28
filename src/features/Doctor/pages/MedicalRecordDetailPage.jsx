@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Alert, Spinner, Card, ListGroup, Table, Button, Modal, Form, Row, Col } from 'react-bootstrap';
 import axiosInstance from '../../../services/axiosInstance';
@@ -18,6 +18,9 @@ const MedicalRecordDetailPage = () => {
     const [medicines, setMedicines] = useState([]); // Danh sách thuốc để chọn (từ API tra cứu)
     const [prescriptionNotes, setPrescriptionNotes] = useState('');
     const [isSubmittingPrescription, setIsSubmittingPrescription] = useState(false);
+
+    // Thêm state cho autocomplete
+    const autocompleteRefs = useRef([]); // refs cho input để handle blur
 
     // Hàm fetch chi tiết hồ sơ bệnh án
     const fetchMedicalRecordDetails = async () => {
@@ -149,6 +152,14 @@ const MedicalRecordDetailPage = () => {
         }
     };
 
+    // Hàm lọc thuốc theo search text
+    const getFilteredMedicines = (searchText) => {
+        if (!searchText) return medicines;
+        return medicines.filter(med =>
+            med.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            (med.categories && med.categories.some(cat => cat.name.toLowerCase().includes(searchText.toLowerCase())))
+        );
+    };
 
     if (loading) {
         return (
@@ -275,20 +286,48 @@ const MedicalRecordDetailPage = () => {
                         {prescriptionItems.map((item, index) => (
                             <Card key={index} className="mb-3 p-3 bg-light">
                                 <Row className="align-items-center">
-                                    <Col md={4}>
+                                    <Col md={4} style={{position: 'relative'}}>
                                         <Form.Group className="mb-2">
                                             <Form.Label>Thuốc</Form.Label>
-                                            <Form.Select
-                                                value={item.medicine_id}
-                                                onChange={(e) => handleUpdatePrescriptionItem(index, 'medicine_id', parseInt(e.target.value))}
-                                            >
-                                                <option value="">Chọn thuốc</option>
-                                                {medicines.map(med => (
-                                                    <option key={med.id} value={med.id}>
-                                                        {med.name} ({med.concentration} {med.unit}) - {formatCurrency(med.price)}
-                                                    </option>
-                                                ))}
-                                            </Form.Select>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Tìm tên thuốc hoặc loại thuốc..."
+                                                value={item.medicine_name || ''}
+                                                autoComplete="off"
+                                                ref={el => autocompleteRefs.current[index] = el}
+                                                onChange={e => {
+                                                    const value = e.target.value;
+                                                    handleUpdatePrescriptionItem(index, 'medicine_name', value);
+                                                }}
+                                                onFocus={e => {
+                                                    handleUpdatePrescriptionItem(index, 'showDropdown', true);
+                                                }}
+                                                onBlur={e => {
+                                                    setTimeout(() => handleUpdatePrescriptionItem(index, 'showDropdown', false), 200);
+                                                }}
+                                            />
+                                            {/* Dropdown suggestion */}
+                                            {item.showDropdown && getFilteredMedicines(item.medicine_name).length > 0 && (
+                                                <div style={{position:'absolute',zIndex:10, background:'#fff', border:'1px solid #ccc', width:'100%', maxHeight:200, overflowY:'auto'}}>
+                                                    {getFilteredMedicines(item.medicine_name).map(med => (
+                                                        <div
+                                                            key={med.id}
+                                                            style={{padding:'6px 12px', cursor:'pointer'}}
+                                                            onMouseDown={() => {
+                                                                handleUpdatePrescriptionItem(index, 'medicine_id', med.id);
+                                                                handleUpdatePrescriptionItem(index, 'medicine_name', med.name + (med.categories && med.categories.length > 0 ? ` (${med.categories[0].name})` : ''));
+                                                                handleUpdatePrescriptionItem(index, 'medicine', med);
+                                                                handleUpdatePrescriptionItem(index, 'showDropdown', false);
+                                                            }}
+                                                        >
+                                                            <span>{med.name}</span>
+                                                            {med.categories && med.categories.length > 0 && (
+                                                                <span style={{color:'#888'}}> - {med.categories[0].name}</span>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </Form.Group>
                                     </Col>
                                     <Col md={3}>

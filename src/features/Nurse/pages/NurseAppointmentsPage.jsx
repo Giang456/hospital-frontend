@@ -28,6 +28,18 @@ const NurseAppointmentsPage = () => {
     });
     const [isUpdatingVitals, setIsUpdatingVitals] = useState(false);
 
+    // Hàm dịch trạng thái sang tiếng Việt
+    const translateStatus = (status) => {
+        const statusMap = {
+            'PENDING_APPROVAL': 'Chờ phê duyệt',
+            'APPROVED': 'Đã phê duyệt',
+            'COMPLETED': 'Hoàn thành',
+            'PAYMENT_PENDING': 'Chờ thanh toán',
+            'CANCELLED': 'Đã hủy',
+            'REJECTED': 'Từ chối'
+        };
+        return statusMap[status] || status;
+    };
 
     const fetchAppointments = async (type) => {
         setLoading(true);
@@ -128,7 +140,7 @@ const NurseAppointmentsPage = () => {
                     <br />
                     Lý do khám: {appointment.reason || 'N/A'}
                     <br />
-                    Trạng thái: <strong>{appointment.status}</strong>
+                    Trạng thái: <strong>{translateStatus(appointment.status)}</strong>
                 </Card.Text>
                 <div className="d-flex justify-content-end gap-2">
                     {/* Nút cập nhật sinh hiệu chỉ khi đã có medical_record */}

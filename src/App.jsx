@@ -338,7 +338,7 @@ const NurseDashboard = () => (
           <Card.Body>
             <Card.Title>Quản lý Thanh toán</Card.Title>
             <Card.Text>Xử lý các giao dịch thanh toán của bệnh nhân.</Card.Text>
-            <Link to="/nurse/payments/pending" className="btn btn-primary">Truy cập</Link>
+            <Link to="/nurse/appointments" className="btn btn-primary">Truy cập</Link>
           </Card.Body>
         </Card>
       </Col>

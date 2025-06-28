@@ -24,6 +24,20 @@ const PaymentProcessingPage = () => {
     const [qrCodeData, setQrCodeData] = useState(''); // URL hình ảnh QR hoặc payload QR
     const [isGeneratingQr, setIsGeneratingQr] = useState(false);
 
+    // Hàm dịch trạng thái sang tiếng Việt
+    const translateStatus = (status) => {
+        const statusMap = {
+            'PENDING_APPROVAL': 'Chờ phê duyệt',
+            'APPROVED': 'Đã phê duyệt',
+            'COMPLETED': 'Hoàn thành',
+            'PAYMENT_PENDING': 'Chờ thanh toán',
+            'PAID': 'Đã thanh toán',
+            'CANCELLED': 'Đã hủy',
+            'REJECTED': 'Từ chối'
+        };
+        return statusMap[status] || status;
+    };
+
     // Hàm fetch chi tiết lịch hẹn
     const fetchAppointmentDetails = async () => {
         setLoading(true);
@@ -216,7 +230,7 @@ const PaymentProcessingPage = () => {
                     <Col md={6}>
                         <p className="mb-1"><strong>Phòng khám:</strong> {appointment.clinic?.name || 'N/A'} ({appointment.clinic?.room_number || 'N/A'})</p>
                         <p className="mb-1"><strong>Lý do khám:</strong> {appointment.reason || 'N/A'}</p>
-                        <p className="mb-1"><strong>Trạng thái lịch hẹn:</strong> <strong>{appointment.status}</strong></p>
+                        <p className="mb-1"><strong>Trạng thái lịch hẹn:</strong> <strong>{translateStatus(appointment.status)}</strong></p>
                     </Col>
                 </Row>
                 <hr />
