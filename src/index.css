@@ -4,7 +4,7 @@
 /* Reset CSS cơ bản và kiểu dáng toàn cục */
 body {
   margin: 0;
-  font-family: Arial, sans-serif; /* Font cơ bản */
+  font-family: "Times New Roman", Times, serif; /* Font Times New Roman */
   background-color: #f0f2f5; /* Nền xám nhạt */
   color: #333;
 }

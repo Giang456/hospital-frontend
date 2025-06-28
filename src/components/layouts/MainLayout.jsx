@@ -66,7 +66,6 @@ const MainLayout = ({ children }) => {
 
             script.onerror = () => {
                 console.error('Lỗi khi tải script Dialogflow Messenger.');
-                // Xóa thẻ script bị lỗi để có thể thử lại ở lần sau (nếu component mount lại)
                 const failedScript = document.getElementById(SCRIPT_ID);
                 if (failedScript) {
                     failedScript.remove();
@@ -78,12 +77,7 @@ const MainLayout = ({ children }) => {
         };
 
         initDialogflowMessenger();
-
-        // Cleanup function khi component unmount
         return () => {
-            // Chỉ xóa element <df-messenger> khỏi DOM.
-            // KHÔNG xóa thẻ script, vì nó đã đăng ký custom elements ở mức global.
-            // Nếu xóa script và thêm lại, sẽ gây lỗi "already registered".
             const dfMessengerElement = document.querySelector(MESSENGER_TAG_NAME);
             if (dfMessengerElement) {
                 dfMessengerElement.remove();
