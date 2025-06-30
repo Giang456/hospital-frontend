@@ -13,6 +13,12 @@ const getStatusLabel = (status) => {
             return 'Đã phê duyệt';
         case 'CANCELLED':
             return 'Đã hủy';
+        case 'CANCELLED_BY_PATIENT':
+            return 'Bệnh nhân hủy';
+        case 'PAYMENT_PENDING':
+            return 'Chờ thanh toán';
+        case 'PAID':
+            return 'Đã thanh toán';
         case 'REJECTED':
             return 'Bị từ chối';
         case 'COMPLETED':
