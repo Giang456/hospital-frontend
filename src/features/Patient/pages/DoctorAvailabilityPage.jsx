@@ -48,6 +48,27 @@ const DoctorAvailabilityPage = () => {
         }
     }, [doctorId, selectedDate]);
 
+    // Hàm kiểm tra slot có nằm trong giờ nghỉ trưa không
+    const isLunchBreak = (slot) => {
+        // slot.start_time và slot.end_time dạng 'HH:mm:ss' hoặc 'HH:mm'
+        const start = slot.start_time.substring(0,5);
+        const end = slot.end_time.substring(0,5);
+        // Chuyển về số phút trong ngày
+        const toMinutes = (t) => {
+            const [h, m] = t.split(':').map(Number);
+            return h * 60 + m;
+        };
+        const startMin = toMinutes(start);
+        const endMin = toMinutes(end);
+        // 11:00 = 660, 13:00 = 780
+        // Nếu bất kỳ phần nào của slot nằm trong khoảng 11:00-13:00 thì ẩn
+        return (
+            (startMin >= 660 && startMin < 780) ||
+            (endMin > 660 && endMin <= 780) ||
+            (startMin < 660 && endMin > 780) // slot bao trùm cả khoảng nghỉ trưa
+        );
+    };
+
     // Hàm xử lý đặt lịch
     const handleBookAppointment = async () => {
         if (!selectedSlot || !doctor) {
@@ -162,9 +183,9 @@ const DoctorAvailabilityPage = () => {
                     <Col md={8}>
                         <Form.Group>
                             <Form.Label className="mb-2">Khung giờ</Form.Label>
-                            {availableSlots.length > 0 ? (
+                            {availableSlots.filter(slot => !isLunchBreak(slot)).length > 0 ? (
                                 <div className="d-flex flex-wrap gap-2">
-                                    {availableSlots.map((slot, index) => (
+                                    {availableSlots.filter(slot => !isLunchBreak(slot)).map((slot, index) => (
                                         <Button
                                             key={index}
                                             variant={
