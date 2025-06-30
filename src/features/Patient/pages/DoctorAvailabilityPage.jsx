@@ -64,8 +64,8 @@ const DoctorAvailabilityPage = () => {
         try {
             const payload = {
                 doctor_id: doctor.id,
-                appointment_date: selectedSlot.date,
-                appointment_time: selectedSlot.start_time,
+                appointment_date: format(selectedDate, 'yyyy-MM-dd'),
+                appointment_slot: selectedSlot.start_time,
                 reason: reason,
                 notes_patient: notes,
             };
@@ -193,7 +193,7 @@ const DoctorAvailabilityPage = () => {
                     <Card className="mt-4 p-3 shadow-sm bg-light">
                         <h4>Xác nhận đặt lịch</h4>
                         <p><strong>Bác sĩ:</strong> {doctor.name}</p>
-                        <p><strong>Thời gian:</strong> {selectedSlot.date} từ {selectedSlot.start_time.substring(0, 5)} đến {selectedSlot.end_time.substring(0, 5)}</p>
+                        <p><strong>Thời gian:</strong> {format(selectedDate, 'yyyy-MM-dd')} từ {selectedSlot.start_time.substring(0, 5)} đến {selectedSlot.end_time.substring(0, 5)}</p>
                         <Form.Group className="mb-3">
                             <Form.Label>Lý do khám (bắt buộc)</Form.Label>
                             <Form.Control
